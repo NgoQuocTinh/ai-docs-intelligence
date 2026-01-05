@@ -1,0 +1,87 @@
+# AI Document Intelligence - Project Configuration
+
+# Project Settings
+project:
+  name: "ai-docs-intelligence"
+  version: "0.1.0"
+  description: "AI-powered document intelligence system for invoice processing"
+
+# Paths
+paths:
+  dataset:
+    root: "dataset"
+    raw: "dataset/raw"
+    ocr_text: "dataset/ocr_text"
+    labels: "dataset/labels"
+    preprocessed: "dataset/preprocessed"
+  output:
+    root: "output"
+    reports: "reports"
+    models: "models"
+  configs: "configs"
+
+# OCR Settings
+ocr:
+  paddle:
+    use_gpu: false
+    lang: "en"
+    det_algorithm: "DB"
+    rec_algorithm: "CRNN"
+    use_angle_cls: true
+    det_db_thresh: 0.3
+    det_db_box_thresh: 0.6
+    rec_batch_num: 6
+  tesseract:
+    lang: "eng"
+    config: "--psm 6"
+    min_confidence: 0.6
+
+# Image Preprocessing
+preprocessing:
+  resize:
+    max_width: 1024
+    max_height: 1024
+  normalize: true
+  denoise: true
+  enhance_contrast: true
+
+# Synthetic Data Generation
+synthetic:
+  num_samples: 200
+  noise_levels:
+    - 0.0    # Clean
+    - 0.1    # Low noise
+    - 0.2    # Medium noise
+    - 0.3    # High noise
+  rotation_range: [-5, 5]  # degrees
+  brightness_range: [0.8, 1.2]
+  locales: ["en_US", "vi_VN"]
+
+# Model Settings
+model:
+  confidence_threshold: 0.6
+  batch_size: 8
+  max_sequence_length: 512
+
+# Error Analysis
+error_analysis:
+  key_fields:
+    - "invoice_number"
+    - "invoice_date"
+    - "vendor_name"
+    - "total_amount"
+    - "currency"
+  similarity_threshold: 0.85
+  report_format: "json"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/app.log"
+  console: true
+
+# Testing
+testing:
+  coverage_threshold: 70
+  test_data_size: 50

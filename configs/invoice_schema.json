@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Invoice Schema",
+  "description": "Schema for invoice document structure and validation",
+  "type": "object",
+  "required": [
+    "invoice_number",
+    "invoice_date",
+    "vendor_name",
+    "total_amount",
+    "currency"
+  ],
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "description": "Unique invoice identifier",
+      "minLength": 1
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Invoice issue date (YYYY-MM-DD format)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "due_date": {
+      "type": "string",
+      "description": "Payment due date (YYYY-MM-DD format)",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "vendor_name": {
+      "type": "string",
+      "description": "Name of the vendor/seller",
+      "minLength": 1
+    },
+    "vendor_address": {
+      "type": "string",
+      "description": "Vendor's address"
+    },
+    "vendor_tax_id": {
+      "type": "string",
+      "description": "Vendor's tax identification number"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Name of the customer/buyer"
+    },
+    "customer_address": {
+      "type": "string",
+      "description": "Customer's address"
+    },
+    "line_items": {
+      "type": "array",
+      "description": "List of items in the invoice",
+      "items": {
+        "type": "object",
+        "required": ["description", "quantity", "unit_price", "amount"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Item description"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantity of items",
+            "minimum": 0
+          },
+          "unit_price": {
+            "type": "number",
+            "description": "Price per unit",
+            "minimum": 0
+          },
+          "amount": {
+            "type": "number",
+            "description": "Total amount for this line item",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal amount before tax",
+      "minimum": 0
+    },
+    "tax_amount": {
+      "type": "number",
+      "description": "Tax amount",
+      "minimum": 0
+    },
+    "tax_rate": {
+      "type": "number",
+      "description": "Tax rate percentage",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Total amount including tax",
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code (ISO 4217)",
+      "enum": ["USD", "EUR", "GBP", "VND", "JPY", "CNY"],
+      "default": "USD"
+    },
+    "payment_terms": {
+      "type": "string",
+      "description": "Payment terms and conditions"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments"
+    },
+    "confidence_scores": {
+      "type": "object",
+      "description": "Confidence scores for extracted fields",
+      "properties": {
+        "invoice_number": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "invoice_date": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "vendor_name": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "total_amount": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}
