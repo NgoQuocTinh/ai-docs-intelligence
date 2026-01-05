@@ -28,7 +28,7 @@ class TestOCREngine:
         
         try:
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-        except:
+        except (OSError, IOError):
             font = ImageFont.load_default()
         
         draw.text((20, 50), "INVOICE", fill='black', font=font)
@@ -146,11 +146,13 @@ class TestOCRErrorAnalyzer:
         """Test error analyzer initialization."""
         analyzer = OCRErrorAnalyzer(
             labels_dir=str(Path(temp_dir) / "labels"),
-            ocr_results_dir=str(Path(temp_dir) / "ocr_text")
+            ocr_results_dir=str(Path(temp_dir) / "ocr_text"),
+            similarity_threshold=0.85
         )
         
         assert analyzer.labels_dir == Path(temp_dir) / "labels"
         assert analyzer.ocr_results_dir == Path(temp_dir) / "ocr_text"
+        assert analyzer.similarity_threshold == 0.85
     
     def test_calculate_similarity(self, temp_dir):
         """Test string similarity calculation."""

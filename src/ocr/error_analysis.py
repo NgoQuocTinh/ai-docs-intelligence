@@ -15,7 +15,8 @@ class OCRErrorAnalyzer:
     def __init__(
         self,
         labels_dir: str = "dataset/labels",
-        ocr_results_dir: str = "dataset/ocr_text"
+        ocr_results_dir: str = "dataset/ocr_text",
+        similarity_threshold: float = 0.85
     ):
         """
         Initialize error analyzer.
@@ -23,9 +24,11 @@ class OCRErrorAnalyzer:
         Args:
             labels_dir: Directory containing ground truth labels
             ocr_results_dir: Directory containing OCR results
+            similarity_threshold: Threshold for considering a field correct (default: 0.85)
         """
         self.labels_dir = Path(labels_dir)
         self.ocr_results_dir = Path(ocr_results_dir)
+        self.similarity_threshold = similarity_threshold
         self.logger = setup_logger(__name__)
         
         # Key fields to analyze
@@ -36,7 +39,7 @@ class OCRErrorAnalyzer:
             "total_amount"
         ]
         
-        self.logger.info("OCRErrorAnalyzer initialized")
+        self.logger.info(f"OCRErrorAnalyzer initialized (threshold: {similarity_threshold})")
     
     def load_ground_truth(self, doc_id: str) -> Optional[Dict[str, Any]]:
         """
@@ -217,7 +220,7 @@ class OCRErrorAnalyzer:
                 "ground_truth": str(gt_value),
                 "ocr_extracted": ocr_value,
                 "similarity": similarity,
-                "is_correct": similarity >= 0.85  # Threshold for correctness
+                "is_correct": similarity >= self.similarity_threshold
             }
         
         return {

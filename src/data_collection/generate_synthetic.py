@@ -142,7 +142,7 @@ class InvoiceGenerator:
             font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", self.font_size_title)
             font_normal = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", self.font_size_normal)
             font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", self.font_size_small)
-        except:
+        except (OSError, IOError):
             # Fallback to default font
             font_title = ImageFont.load_default()
             font_normal = ImageFont.load_default()

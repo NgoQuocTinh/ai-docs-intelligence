@@ -5,6 +5,7 @@ Run this after setup to verify all components are in place.
 """
 
 import sys
+import platform
 from pathlib import Path
 
 # Color codes for output
@@ -89,12 +90,20 @@ def main():
         'scripts/generate_dataset.py'
     ]
     
+    is_windows = platform.system() == 'Windows'
+    
     for file_path in script_files:
         full_path = base_path / file_path
         total_checks += 1
         exists = full_path.exists()
-        executable = exists and full_path.stat().st_mode & 0o111
-        if check(f"Script exists and executable: {file_path}", exists and executable):
+        
+        # On Windows, just check existence; on Unix, check executable bit
+        if is_windows:
+            condition = exists
+        else:
+            condition = exists and (full_path.stat().st_mode & 0o111)
+        
+        if check(f"Script exists{' and executable' if not is_windows else ''}: {file_path}", condition):
             checks_passed += 1
     
     # Check documentation
